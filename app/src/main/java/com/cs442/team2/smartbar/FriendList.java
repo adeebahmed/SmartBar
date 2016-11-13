@@ -1,4 +1,4 @@
-package com.cs442.team2.smartbar.fragments;
+package com.cs442.team2.smartbar;
 
 import android.app.Activity;
 import android.view.LayoutInflater;

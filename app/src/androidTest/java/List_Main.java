@@ -1,6 +1,3 @@
-package com.cs442.team2.smartbar.fragments;
-
-
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +6,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.app.Activity;
 
+import com.cs442.team2.smartbar.FriendList;
 import com.cs442.team2.smartbar.data.DataBaseHelper;
 
 import java.io.IOException;
@@ -25,7 +23,7 @@ public class List_Main extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_main);
+        setContentView(android.R.layout.activity_list_main);
 
         wDbHelper = new DataBaseHelper(this);
         try {
