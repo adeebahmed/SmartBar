@@ -1,9 +1,11 @@
 package com.cs442.team2.smartbar.data;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,7 +20,8 @@ import java.io.OutputStream;
 public class DataBaseHelper extends SQLiteOpenHelper {
 
     //The Android's default system path of your application database.
-    private static String DB_PATH = "/data/data/com.cs442.team2.smartbar/databases/";
+    //private static String DB_PATH = "/data/data/com.cs442.team2.smartbar/databases/";
+    private static String DB_PATH = "/data/";
 
     private static String DB_NAME = "smartbar.db";
 
@@ -150,8 +153,36 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public SQLiteDatabase getWritableDatabase(){
+        return myDataBase;
+    }
+
+
+
     // Add your public helper methods to access and get content from the database.
     // You could return cursors by doing "return myDataBase.query(....)" so it'd be easy
     // to you to create adapters for your views.
 
+    public boolean userExists(String un, String pw){
+        SQLiteDatabase db = getWritableDatabase();
+        String [] credentials = {un,pw};
+        Cursor cursor = db.rawQuery("SELECT * FROM Users WHERE username = ?, password = ?", credentials);
+        String result = "";
+
+        while (cursor.moveToNext()) {
+            result=cursor.getString(0);
+            Log.d("login: ", result);
+        }
+
+        cursor.close();
+        db.close();
+
+        if(!(result.isEmpty())){
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
