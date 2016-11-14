@@ -30,6 +30,9 @@
         <activity android:name="com.cs442.team2.smartbar.WorkOutSearchActivity">
 
         </activity>
+        <activity android:name="com.cs442.team2.smartbar.PickdateActivity">
+
+        </activity>
     </application>
 
 </manifest>
