@@ -1,11 +1,14 @@
 package com.cs442.team2.smartbar;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
+import com.cs442.team2.smartbar.fragments.CalendarFragment;
 import com.cs442.team2.smartbar.fragments.OnClickOpenModule;
+import com.cs442.team2.smartbar.fragments.UserJournalFragment;
 
 /**
  * Created by SumedhaGupta on 10/27/16.
@@ -13,19 +16,18 @@ import com.cs442.team2.smartbar.fragments.OnClickOpenModule;
 
 public class UserJournalActivity extends FragmentActivity implements OnClickOpenModule {
 
+    UserJournalFragment userJournalFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journal);
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        UserJournalFragment fragment = new UserJournalFragment();
-        fragment.setOpenModuleInterface(this);
-        fragmentTransaction.add(R.id.fragment_conatiner, fragment);
+        userJournalFragment = new UserJournalFragment();
+        userJournalFragment.setOpenModuleInterface(this);
+        fragmentTransaction.replace(R.id.fragment_conatiner, userJournalFragment, "user_journal");
         fragmentTransaction.commit();
-
-
     }
 
     @Override
@@ -33,17 +35,13 @@ public class UserJournalActivity extends FragmentActivity implements OnClickOpen
 
         switch (module) {
             case "UserJournalActivity":
-                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-
-                android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 CalendarFragment fragment = new CalendarFragment();
-                UserJournalFragment f =new UserJournalFragment();
-                if(f != null)
-                    getFragmentManager().beginTransaction().remove(f);
-                  //  getSupportFragmentManager().beginTransaction().remove(f).commit();
-                /*fragmentTransaction.add(R.id.fragment_conatiner, fragment);
+                fragmentTransaction.replace(R.id.fragment_conatiner, fragment, "calendar");
+                fragmentTransaction.addToBackStack("user_journal");
                 fragmentTransaction.commit();
-                break;*/
+                break;
         }
 
 

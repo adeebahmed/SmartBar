@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.cs442.team2.smartbar.data.DataBaseHelper;
 
 public class LoginActivity extends Activity {
 
@@ -41,18 +38,19 @@ public class LoginActivity extends Activity {
         btnLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(user_exists(un,pw)){
+               /* if(user_exists(un,pw)){*/
                     profileIntent.putExtra("username", un);
                     startActivity(profileIntent);
-                }
+
+               /* }
                 else{
                     Toast.makeText(getApplicationContext(), "Invalid username or password.", Toast.LENGTH_SHORT).show();
-                }
+                }*/
 
             }
         });
     }
-
+/*
     private boolean user_exists(String u, String p){
         //database racked locally
         DataBaseHelper dbh = new DataBaseHelper(getApplicationContext());
@@ -62,5 +60,5 @@ public class LoginActivity extends Activity {
             e.printStackTrace();
         }
         return dbh.userExists(u,p);
-    }
+    }*/
 }

@@ -21,9 +21,6 @@
         <activity android:name="com.cs442.team2.smartbar.ProfileActivity">
 
         </activity>
-        <activity android:name="com.cs442.team2.smartbar.CalendarActivity">
-
-        </activity>
         <activity android:name="com.cs442.team2.smartbar.NotesActivity">
 
         </activity>

@@ -1,11 +1,11 @@
-package com.cs442.team2.smartbar;
+package com.cs442.team2.smartbar.fragments;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +15,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TwoLineListItem;
 
+import com.cs442.team2.smartbar.R;
+import com.cs442.team2.smartbar.Workout_Entity;
 import com.cs442.team2.smartbar.data.DataBaseHelper;
-import com.cs442.team2.smartbar.fragments.OnClickOpenModule;
 
 import java.io.IOException;
 import java.util.ArrayList;
