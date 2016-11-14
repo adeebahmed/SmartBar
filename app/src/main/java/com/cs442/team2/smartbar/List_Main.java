@@ -1,3 +1,6 @@
+package com.cs442.team2.smartbar;
+
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -5,11 +8,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.app.Activity;
-
 import com.cs442.team2.smartbar.FriendList;
 import com.cs442.team2.smartbar.data.DataBaseHelper;
-
 import java.io.IOException;
+import android.R;
+
 
 public class List_Main extends Activity
 {
@@ -30,7 +33,8 @@ public class List_Main extends Activity
 
             wDbHelper.createDataBase();
 
-        } catch (IOException ioe) {
+        } catch (IOException ioe)
+        {
 
             throw new Error("Unable to create database");
 
@@ -61,7 +65,7 @@ public class List_Main extends Activity
                 String s= cursor.getString(cursor.getColumnIndex("first_name"));
                 //Toast.makeText(List_Main.this,"ID is "+ s,Toast.LENGTH_SHORT).show();
                 names[count] = s;
-                imageId[count] = R.drawable.img1;
+                imageId[count] = android.R.drawable.kamran1;
                 count++;
 
             }
@@ -81,6 +85,9 @@ public class List_Main extends Activity
             {
                 Toast.makeText(List_Main.this, "You Clicked at " +names[+ position], Toast.LENGTH_SHORT).show();
 
+                Intent intent = new Intent(List_Main.this,FriendAddWorkout.class);
+                intent.putExtra("friendName", names[position]);
+                startActivity(intent);
             }
         });
 

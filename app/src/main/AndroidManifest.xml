@@ -11,28 +11,19 @@
         <activity android:name="com.cs442.team2.smartbar.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.cs442.team2.smartbar.SignupActivity">
 
-        </activity>
-        <activity android:name="com.cs442.team2.smartbar.ProfileActivity">
 
-        </activity>
-        <activity android:name="com.cs442.team2.smartbar.CalendarActivity">
-
-        </activity>
-        <activity android:name="com.cs442.team2.smartbar.NotesActivity">
-
-        </activity>
-        <activity android:name="com.cs442.team2.smartbar.UserJournalActivity">
-
-        </activity>
-        <activity android:name="com.cs442.team2.smartbar.WorkOutSearchActivity">
-
-        </activity>
+        <activity android:name="com.cs442.team2.smartbar.SignupActivity"></activity>
+        <activity android:name="com.cs442.team2.smartbar.ProfileActivity"></activity>
+        <activity android:name="com.cs442.team2.smartbar.CalendarActivity"></activity>
+        <activity android:name="com.cs442.team2.smartbar.NotesActivity"></activity>
+        <activity android:name="com.cs442.team2.smartbar.UserJournalActivity"></activity>
+        <activity android:name="com.cs442.team2.smartbar.WorkOutSearchActivity"></activity>
+        <activity android:name="com.cs442.team2.smartbar.List_Main"></activity>
+        <activity android:name="com.cs442.team2.smartbar.FriendAddWorkout"></activity>
     </application>
 
 </manifest>
