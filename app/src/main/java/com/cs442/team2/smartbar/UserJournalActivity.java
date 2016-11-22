@@ -1,6 +1,7 @@
 package com.cs442.team2.smartbar;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -17,14 +18,24 @@ import com.cs442.team2.smartbar.fragments.UserJournalFragment;
 public class UserJournalActivity extends FragmentActivity implements OnClickOpenModule {
 
     UserJournalFragment userJournalFragment;
+    UserEntity user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journal);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            user = (UserEntity) intent.getSerializableExtra("user");
+        }
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         userJournalFragment = new UserJournalFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("user", user);
+        userJournalFragment.setArguments(bundle);
         userJournalFragment.setOpenModuleInterface(this);
         fragmentTransaction.replace(R.id.fragment_conatiner, userJournalFragment, "user_journal");
         fragmentTransaction.commit();

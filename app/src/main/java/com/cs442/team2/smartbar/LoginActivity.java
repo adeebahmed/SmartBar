@@ -1,26 +1,56 @@
 package com.cs442.team2.smartbar;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cs442.team2.smartbar.data.DataBaseHelper;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
-import java.io.IOException;
+import java.util.ArrayList;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends AppCompatActivity {
 
-    TextView un,pw;
+    TextView un, pw;
+    private DatabaseReference mDatabase;
+    ArrayList<UserEntity> userList;
+    private UserEntity user;
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        userList = new ArrayList<>();
+        context = this;
+
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        UserEntity user = new UserEntity();
+        user.setEmail("sumedha@gmail.com");
+        user.setFirstName("Sumedha");
+        user.setLastName("Gupta");
+        user.setUserId("12345");
+        user.setPassword("12345");
+        user.setHeight("5.7");
+        user.setWeight("120lb");
+        user.setAge("25");
+        user.setUsername("sumedha22");
+        user.setLocation("Chicago");
+        mDatabase.child("users").child(user.getUsername()).setValue(user);
+
+
 /* ADD FOR UPDATING FRIENDS LIST
 //    final ArrayList<FrontDetails> resultse = new ArrayList<FrontDetails>();
 //    FrontListBaseAdapter asdf = new FrontListBaseAdapter(context, resultse);
@@ -36,71 +66,58 @@ public class LoginActivity extends Activity {
 //    });
 //    */
 
-            Button btnLogIn = (Button) findViewById(R.id.btn_login);
-            un = (TextView) findViewById(R.id.input_email);
-            pw = (TextView) findViewById(R.id.input_password);
-
-            final Intent profileIntent = new Intent(this, ProfileActivity.class);
-
-            btnLogIn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String u = un.getText().toString();
-                    String p = pw.getText().toString();
-                    Log.d("UN: ", u);
-                    Log.d("pw: ", p);
-                    if(user_exists(u,p)){
-                        profileIntent.putExtra("username", u);
-                        startActivity(profileIntent);
-
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), "Invalid username or password.", Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-            });
-        }
-
-    private boolean user_exists(String u, String p){
-        //database racked locally
-        DataBaseHelper dbh = new DataBaseHelper(getApplicationContext());
-
-        try {
-            dbh.createDataBase();
-
-        } catch (IOException ioe) {
-            Log.d("ERROR: ", "Unable to create database");
-            //throw new Error("Unable to create database");
-        }
-
-        try {
-            dbh.openDataBase();
-
-        } catch (Exception sqle) {
-            Log.d("ERROR: ", "Unable to create database");
-            //throw new Error("Unable to create database | " + sqle.getMessage().toLowerCase());
-        }
+        Button btnLogIn = (Button) findViewById(R.id.btn_login);
+        un = (TextView) findViewById(R.id.input_email);
+        pw = (TextView) findViewById(R.id.input_password);
 
 
-        String [] credentials = {u,p};
-        Cursor cursor = dbh.getReadableDatabase().rawQuery("SELECT * FROM users WHERE email = ? and password = ?;", credentials);
-        String result = "";
-
-        while (cursor.moveToNext()) {
-            result=cursor.getString(0);
-            Log.d("login: ", result);
-        }
-
-        cursor.close();
-        dbh.close();
-
-        if(!(result.isEmpty())){
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        btnLogIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String u = un.getText().toString();
+                String p = pw.getText().toString();
+                Log.d("UN: ", u);
+                Log.d("pw: ", p);
+                user_exists(u, p);
+            }
+        });
     }
+
+    private void user_exists(final String u, final String p) {
+
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                user = (UserEntity) dataSnapshot.getValue(UserEntity.class);
+                final Intent profileIntent = new Intent(getApplicationContext(), ProfileActivity.class);
+
+                if (p.equals(user.getPassword())) {
+
+                    SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("smartbar", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.clear();
+                    Gson gson = new Gson();
+                    editor.putString("user", gson.toJson(user));
+                    editor.commit();
+                    profileIntent.putExtra("user", user);
+                    startActivity(profileIntent);
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Invalid username or password.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("team2", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+        mDatabase.child("users").child(u).addListenerForSingleValueEvent(postListener);
+
+    }
+
+
 }

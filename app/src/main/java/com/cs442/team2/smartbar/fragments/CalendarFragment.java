@@ -2,7 +2,7 @@ package com.cs442.team2.smartbar.fragments;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -19,17 +19,25 @@ import android.widget.Toast;
 
 import com.cs442.team2.smartbar.NotesActivity;
 import com.cs442.team2.smartbar.R;
-import com.cs442.team2.smartbar.Workout_Entity;
+import com.cs442.team2.smartbar.UserEntity;
+import com.cs442.team2.smartbar.WorkoutEntity;
 import com.cs442.team2.smartbar.data.DataBaseHelper;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by SumedhaGupta on 11/6/16.
@@ -41,11 +49,11 @@ public class CalendarFragment extends Fragment {
     private int yr, mon, dy;
 
     DataBaseHelper wDbHelper;
-    List<Workout_Entity> workoutHistoryDetails;
+    List<WorkoutEntity> workoutHistoryDetails;
     private CaldroidFragment caldroidFragment;
     TextView date;
-
-
+    private DatabaseReference mDatabase;
+    private Bundle saveInstance;
 
     private DatePickerDialog.OnDateSetListener dateListener =
             new DatePickerDialog.OnDateSetListener() {
@@ -84,58 +92,33 @@ public class CalendarFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.saveInstance = savedInstanceState;
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_calendar, container, false);
-        date = (TextView) v.findViewById(R.id.dateTxtView);
-        //database
+
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("smartbar", MODE_PRIVATE);
+        String userString = sharedPreferences.getString("user", "");
+
+        Gson gson = new Gson();
+        UserEntity user = gson.fromJson(userString, UserEntity.class);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         workoutHistoryDetails = new ArrayList<>();
-        wDbHelper = new DataBaseHelper(getActivity());
-        try {
+        loadWorkouts(user);
 
-            wDbHelper.createDataBase();
 
-        } catch (IOException ioe) {
+        date = (TextView) v.findViewById(R.id.dateTxtView);
 
-            throw new Error("Unable to create database");
 
-        }
-
-        try {
-
-            wDbHelper.openDataBase();
-
-        } catch (Exception sqle) {
-
-            //throw sqle;
-
-        }
-        //retrieving the data from database
-        String sql = "select * from workouts order by _id";
-        Cursor cursor = wDbHelper.getReadableDatabase().rawQuery(sql, null);
-        while (cursor.moveToNext()) {
-            Workout_Entity p = new Workout_Entity();
-            p.setwId(Integer.parseInt(cursor.getString(cursor.getColumnIndex("_id"))));
-            p.setDate(cursor.getString(cursor.getColumnIndex("date")));
-            p.setStartTime(cursor.getString(cursor.getColumnIndex("start")));
-            p.setEndTime(cursor.getString(cursor.getColumnIndex("end")));
-            p.setwUserId(Integer.parseInt(cursor.getString(cursor.getColumnIndex("fk_user_id"))));
-            p.setExercise(cursor.getString(cursor.getColumnIndex("exercise")));
-            p.setExerReps(Integer.parseInt(cursor.getString(cursor.getColumnIndex("reps"))));
-            p.setExerSets(Integer.parseInt(cursor.getString(cursor.getColumnIndex("sets"))));
-            p.setBarWeight(Integer.parseInt(cursor.getString(cursor.getColumnIndex("weight"))));
-            workoutHistoryDetails.add(p);
-
-        }
-
-        // end database
         Button datePickerButton = (Button) v.findViewById(R.id.date_picker_button);
 
         /** This integer uniquely defines the dialog to be used for displaying date picker.*/
 
         datePickerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mon=caldroidFragment.getMonth();
-                yr=caldroidFragment.getYear();
+                mon = caldroidFragment.getMonth();
+                yr = caldroidFragment.getYear();
                 //dy=caldroidFragment.get;
                 new DatePickerDialog(getContext(), dateListener, yr, mon, dy).show();
 
@@ -143,6 +126,13 @@ public class CalendarFragment extends Fragment {
         });
 
 
+
+
+
+        return v;
+    }
+
+    private void loadCaldroid() {
         final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
 
         // Setup caldroid fragment
@@ -159,8 +149,8 @@ public class CalendarFragment extends Fragment {
         // Setup arguments
 
         // If Activity is created after rotation
-        if (savedInstanceState != null) {
-            caldroidFragment.restoreStatesFromKey(savedInstanceState,
+        if (this.saveInstance != null) {
+            caldroidFragment.restoreStatesFromKey(this.saveInstance,
                     "CALDROID_SAVED_STATE");
         }
         // If activity is created from fresh
@@ -199,7 +189,7 @@ public class CalendarFragment extends Fragment {
             public void onSelectDate(Date date, View view) {
                 Toast.makeText(getContext(), formatter.format(date),
                         Toast.LENGTH_SHORT).show();
-                Intent intent= new Intent(getActivity(), NotesActivity.class);
+                Intent intent = new Intent(getActivity(), NotesActivity.class);
             }
 
             @Override
@@ -231,15 +221,12 @@ public class CalendarFragment extends Fragment {
         caldroidFragment.setCaldroidListener(listener);
 
         //final TextView textView = (TextView) v.findViewById(R.id.textview);
-
-
-        return v;
     }
 
     private void setCustomResourceForDates() {
         Calendar cal = Calendar.getInstance();
         //highlighting the dates
-        for (Workout_Entity w : workoutHistoryDetails) {
+        for (WorkoutEntity w : workoutHistoryDetails) {
             String dateString = w.getDate();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date convertedDate = new Date();
@@ -284,4 +271,26 @@ public class CalendarFragment extends Fragment {
         cal2.set(Calendar.MILLISECOND, 0);
         return cal2.getTime();
     }
+
+    private void loadWorkouts(UserEntity user) {
+        mDatabase.child("users").child(user.getUsername()).child("workouts").addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                workoutHistoryDetails.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    WorkoutEntity workout = (WorkoutEntity) snapshot.getValue(WorkoutEntity.class);
+                    workoutHistoryDetails.add(workout);
+
+                }
+                loadCaldroid();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("team2", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+    }
+
 }
