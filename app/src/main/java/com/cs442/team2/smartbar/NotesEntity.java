@@ -4,7 +4,7 @@ package com.cs442.team2.smartbar;
  * Created by Sumedhagupta on 11/10/16.
  */
 
-public class Notes_Entity {
+public class NotesEntity {
 
     int noteId;
     String notes;
