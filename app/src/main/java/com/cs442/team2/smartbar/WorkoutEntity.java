@@ -1,12 +1,14 @@
 package com.cs442.team2.smartbar;
 
+import java.io.Serializable;
+
 /**
  * Created by SumedhaGupta on 10/27/16.
  */
 
-public class WorkoutEntity {
+public class WorkoutEntity implements Serializable{
 
-    int wId;
+    String wId;
     String date;
     String startTime;
     String endTime;
@@ -15,12 +17,21 @@ public class WorkoutEntity {
     int exerReps;
     int exerSets;
     int barWeight;
+    String notes;
 
-    public int getwId() {
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getwId() {
         return wId;
     }
 
-    public void setwId(int wId) {
+    public void setwId(String wId) {
         this.wId = wId;
     }
 

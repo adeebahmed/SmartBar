@@ -1,7 +1,6 @@
 package com.cs442.team2.smartbar.fragments;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -17,7 +16,6 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cs442.team2.smartbar.NotesActivity;
 import com.cs442.team2.smartbar.R;
 import com.cs442.team2.smartbar.UserEntity;
 import com.cs442.team2.smartbar.WorkoutEntity;
@@ -52,8 +50,14 @@ public class CalendarFragment extends Fragment {
     List<WorkoutEntity> workoutHistoryDetails;
     private CaldroidFragment caldroidFragment;
     TextView date;
-    private DatabaseReference mDatabase;
     private Bundle saveInstance;
+    OnClickOpenModule onClickOpenModule;
+    private DatabaseReference mDatabase;
+
+    public void setOpenModuleInterface(OnClickOpenModule onClickOpenModule) {
+        this.onClickOpenModule = onClickOpenModule;
+    }
+
 
     private DatePickerDialog.OnDateSetListener dateListener =
             new DatePickerDialog.OnDateSetListener() {
@@ -126,9 +130,6 @@ public class CalendarFragment extends Fragment {
         });
 
 
-
-
-
         return v;
     }
 
@@ -187,9 +188,14 @@ public class CalendarFragment extends Fragment {
 
             @Override
             public void onSelectDate(Date date, View view) {
-                Toast.makeText(getContext(), formatter.format(date),
+               /* Toast.makeText(getContext(), formatter.format(date),
                         Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), NotesActivity.class);
+                startActivity(intent);*/
+
+                onClickOpenModule.callOpenModule("notesfragment", date);
+
+
             }
 
             @Override
@@ -254,6 +260,8 @@ public class CalendarFragment extends Fragment {
                 cal.add(Calendar.DATE, 0);
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(convertedDate);
+                /*calendar.set(calendar.YEAR, calendar.MONTH, calendar.DATE, 8,0,0);
+                setAlarm(calendar);*/
                 caldroidFragment.setBackgroundDrawableForDate(g, calendar.getTime());
 
             }
@@ -273,7 +281,7 @@ public class CalendarFragment extends Fragment {
     }
 
     private void loadWorkouts(UserEntity user) {
-        mDatabase.child("users").child(user.getUsername()).child("workouts").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("users").child(user.getUsername()).child("workouts").addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -8,8 +8,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.cs442.team2.smartbar.fragments.CalendarFragment;
+import com.cs442.team2.smartbar.fragments.NotesFragment;
 import com.cs442.team2.smartbar.fragments.OnClickOpenModule;
 import com.cs442.team2.smartbar.fragments.UserJournalFragment;
+
+import java.util.Date;
 
 /**
  * Created by SumedhaGupta on 10/27/16.
@@ -42,15 +45,25 @@ public class UserJournalActivity extends FragmentActivity implements OnClickOpen
     }
 
     @Override
-    public void callOpenModule(String module) {
-
+    public void callOpenModule(String module, Date date) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         switch (module) {
             case "UserJournalActivity":
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 CalendarFragment fragment = new CalendarFragment();
+                fragment.setOpenModuleInterface(this);
                 fragmentTransaction.replace(R.id.fragment_conatiner, fragment, "calendar");
                 fragmentTransaction.addToBackStack("user_journal");
+                fragmentTransaction.commit();
+                break;
+
+            case "notesfragment":
+                NotesFragment notesFragment = new NotesFragment();
+                fragmentTransaction.replace(R.id.fragment_conatiner, notesFragment, "notes");
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("selectedDate", date);
+                notesFragment.setArguments(bundle);
+                //fragmentTransaction.addToBackStack("calendar");
                 fragmentTransaction.commit();
                 break;
         }
