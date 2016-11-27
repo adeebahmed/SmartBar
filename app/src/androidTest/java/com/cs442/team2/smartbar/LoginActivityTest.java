@@ -47,15 +47,18 @@ public class LoginActivityTest {
     }
 
     @Test
-    public void invalidCharLogin(){
+    public void invalidCharLogin() throws InterruptedException{
         String invalidChars[] = {".","#","$","[","]"};
 
         for(int i = 0; i < invalidChars.length; i++){
-            onView(withId(R.id.input_email)).perform(typeText(""), closeSoftKeyboard());
-            onView(withId(R.id.input_password)).perform(typeText(""), closeSoftKeyboard());
-
             onView(withId(R.id.input_email)).perform(typeText(invalidChars[i]), closeSoftKeyboard());
             onView(withId(R.id.input_password)).perform(typeText(invalidChars[i]), closeSoftKeyboard());
+        }
+
+        try{
+            onView(withText("Login")).perform(click());
+        }catch(Exception e){
+
         }
 
     }
