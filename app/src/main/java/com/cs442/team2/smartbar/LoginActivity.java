@@ -74,16 +74,26 @@ public class LoginActivity extends AppCompatActivity {
         btnLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String u = un.getText().toString();
-                String p = pw.getText().toString();
+                String u = un.getText().toString().trim();
+                String p = pw.getText().toString().trim();
                 Log.d("UN: ", u);
                 Log.d("pw: ", p);
-                user_exists(u, p);
+                user_exists(u,p);
             }
         });
     }
-
+    private boolean userExists = false;
     private void user_exists(final String u, final String p) {
+
+        if (u.equals("") || p.equals(""))
+            Toast.makeText(getApplicationContext(), "Invalid username or password.", Toast.LENGTH_SHORT).show();
+
+        if(u.equals(null) || p.equals(null))
+            Toast.makeText(getApplicationContext(), "Invalid username or password.", Toast.LENGTH_SHORT).show();
+
+        if(u.contains(".") || u.contains("#") || u.contains("$") || u.contains("[") || u.contains("]") ||
+        p.contains(".") || p.contains("#") || p.contains("$") || p.contains("[") || p.contains("]"))
+            Toast.makeText(getApplicationContext(), "Invalid username or password.", Toast.LENGTH_SHORT).show();
 
         ValueEventListener postListener = new ValueEventListener() {
             @Override
@@ -92,8 +102,10 @@ public class LoginActivity extends AppCompatActivity {
                 user = (UserEntity) dataSnapshot.getValue(UserEntity.class);
                 final Intent profileIntent = new Intent(getApplicationContext(), ProfileActivity.class);
 
-                if (p.equals(user.getPassword())) {
-
+                if(user == null) {
+                    Toast.makeText(getApplicationContext(), "Invalid username or password.", Toast.LENGTH_SHORT).show();
+                }
+                else if (p.equals(user.getPassword())) {
                     SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("smartbar", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.clear();
@@ -102,9 +114,8 @@ public class LoginActivity extends AppCompatActivity {
                     editor.commit();
                     profileIntent.putExtra("user", user);
                     startActivity(profileIntent);
+                    Toast.makeText(getApplicationContext(), "Welcome!", Toast.LENGTH_SHORT).show();
 
-                } else {
-                    Toast.makeText(getApplicationContext(), "Invalid username or password.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -116,7 +127,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
         mDatabase.child("users").child(u).addListenerForSingleValueEvent(postListener);
-
     }
 
 
