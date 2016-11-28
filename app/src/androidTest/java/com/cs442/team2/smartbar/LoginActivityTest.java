@@ -1,8 +1,16 @@
 package com.cs442.team2.smartbar;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
+import junit.framework.Assert;
+
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,12 +32,21 @@ public class LoginActivityTest {
     public ActivityTestRule<LoginActivity> mActivityRule =
             new ActivityTestRule<>(LoginActivity.class);
 
+    private Context c;
+
+    @Before
+    public void setup() {
+        c = InstrumentationRegistry.getContext();
+    }
+
+
 
     @Test
     public void successfulLogin(){
         onView(withId(R.id.input_email)).perform(typeText("adeeb"), closeSoftKeyboard());
         onView(withId(R.id.input_password)).perform(typeText("smartbar"), closeSoftKeyboard());
         onView(withText("Login")).perform(click());
+        Assert.assertEquals(true, getCurrentActivity(c).toLowerCase().contains("profile"));
     }
 
     @Test
@@ -37,6 +54,7 @@ public class LoginActivityTest {
         onView(withId(R.id.input_email)).perform(typeText("adeeb"), closeSoftKeyboard());
         onView(withId(R.id.input_password)).perform(typeText("wrongpassword"), closeSoftKeyboard());
         onView(withText("Login")).perform(click());
+        Assert.assertEquals(true, getCurrentActivity(c).toLowerCase().contains("login"));
     }
 
     @Test
@@ -44,6 +62,7 @@ public class LoginActivityTest {
         onView(withId(R.id.input_email)).perform(typeText(""), closeSoftKeyboard());
         onView(withId(R.id.input_password)).perform(typeText(""), closeSoftKeyboard());
         onView(withText("Login")).perform(click());
+        Assert.assertEquals(true, getCurrentActivity(c).toLowerCase().contains("login"));
     }
 
     @Test
@@ -60,7 +79,17 @@ public class LoginActivityTest {
         }catch(Exception e){
 
         }
+        Assert.assertEquals(true, getCurrentActivity(c).toLowerCase().contains("login"));
+    }
 
+    private String getCurrentActivity(Context context){
+        try{Thread.sleep(500);}catch (Exception e){}
+
+        ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+        ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
+        Log.d("Activity: ", cn.toString());
+
+        return cn.toShortString();
     }
 
 }
