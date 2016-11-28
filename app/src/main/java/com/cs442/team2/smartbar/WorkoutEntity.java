@@ -14,8 +14,8 @@ public class WorkoutEntity implements Serializable{
     String endTime;
     int wUserId;
     String exercise;
-    String exerReps;
-    String exerSets;
+    String reps;
+    String sets;
     String barWeight;
     String notes;
 
@@ -75,20 +75,20 @@ public class WorkoutEntity implements Serializable{
         this.exercise = exercise;
     }
 
-    public String getExerReps() {
-        return exerReps;
+    public String getReps() {
+        return reps;
     }
 
-    public void setExerReps(String exerReps) {
-        this.exerReps = exerReps;
+    public void setReps(String reps) {
+        this.reps = reps;
     }
 
-    public String getExerSets() {
-        return exerSets;
+    public String getSets() {
+        return sets;
     }
 
-    public void setExerSets(String exerSets) {
-        this.exerSets = exerSets;
+    public void setSets(String sets) {
+        this.sets = sets;
     }
 
     public String getBarWeight() {

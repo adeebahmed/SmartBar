@@ -1,17 +1,25 @@
 package com.cs442.team2.smartbar;
 
 import android.app.Activity;
-import android.database.Cursor;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.cs442.team2.smartbar.data.DataBaseHelper;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -20,6 +28,9 @@ import java.io.IOException;
 
 public class GraphActivity extends Activity {
     DataBaseHelper wDbHelper;
+    List<WorkoutEntity> workoutHistoryDetails;
+    private DatabaseReference mDatabase;
+    UserEntity user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,11 +41,18 @@ public class GraphActivity extends Activity {
         int day = bundle.getInt("day");
         int tday = day;
         int year = bundle.getInt("year");
-        int userid= bundle.getInt("userid");
+        SharedPreferences sharedPreferences = this.getSharedPreferences("smartbar", MODE_PRIVATE);
+        String userString = sharedPreferences.getString("user", "");
 
-        double[] x = {0,0,0};
-        int i=0;
+        Gson gson = new Gson();
+        workoutHistoryDetails= new ArrayList<>();
+        user = gson.fromJson(userString, UserEntity.class);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        loadWorkouts(user,month,day,year);
 
+
+
+/*
         wDbHelper = new DataBaseHelper(this);
         try {
 
@@ -71,40 +89,78 @@ public class GraphActivity extends Activity {
             tday++;
             i++;
         }
-        String date1 = Integer.toString(month)+"/"+Integer.toString(day)+"/"+Integer.toString(year);
-        String date2 = Integer.toString(month)+"/"+Integer.toString(day+1)+"/"+Integer.toString(year);
-        String date3 = Integer.toString(month)+"/"+Integer.toString(day+2)+"/"+Integer.toString(year);
+        */
 
-
-
-        GraphView graph = (GraphView) findViewById(R.id.graph);
-
-
-
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, x[0]),
-                new DataPoint(1, x[1]),
-                new DataPoint(2, x[2])
-        });
-
-        graph.addSeries(series);
-        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        staticLabelsFormatter.setHorizontalLabels(new String[] {date1,date2,date3});
-
-
-        graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-        graph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 4 because of the space
-
-
-
-
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinY(1);
-        graph.getViewport().setMaxY(5);
-        series.setDrawBackground(true);
-        series.setBackgroundColor(Color.BLUE);
-
-
-        graph.getGridLabelRenderer().setHumanRounding(false);
     }
+    private void loadWorkouts(UserEntity user,final int month,final int day,final int year) {
+        final double[] x = {0,0,0};
+
+        mDatabase.child("users").child(user.getUsername()).child("workouts").addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                workoutHistoryDetails.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    WorkoutEntity workout = (WorkoutEntity) snapshot.getValue(WorkoutEntity.class);
+                    workoutHistoryDetails.add(workout);
+
+                }
+                int i=0;
+                while(i<3) {
+                    WorkoutEntity entity = (WorkoutEntity) workoutHistoryDetails.get(i);
+                    String sets = entity.getSets();
+                    String reps = entity.getReps();
+                    String weight = entity.getBarWeight();
+                    Double s1 = Double.parseDouble(sets);
+                    Double s2 = Double.parseDouble(reps);
+                    Double s3 = Double.parseDouble(weight);
+                    double temp = (s1 * s2 * s3) / (double) 1000;
+                    x[i] = temp;
+                    i++;
+                }
+
+                String date1 = Integer.toString(month)+"/"+Integer.toString(day)+"/"+Integer.toString(year);
+                String date2 = Integer.toString(month)+"/"+Integer.toString(day+1)+"/"+Integer.toString(year);
+                String date3 = Integer.toString(month)+"/"+Integer.toString(day+2)+"/"+Integer.toString(year);
+
+
+
+                GraphView graph = (GraphView) findViewById(R.id.graph);
+
+
+
+                LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+                        new DataPoint(0, x[0]),
+                        new DataPoint(1, x[1]),
+                        new DataPoint(2, x[2])
+                });
+
+                graph.addSeries(series);
+                StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+                staticLabelsFormatter.setHorizontalLabels(new String[] {date1,date2,date3});
+
+
+                graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+                graph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 4 because of the space
+
+
+
+
+                graph.getViewport().setYAxisBoundsManual(true);
+                graph.getViewport().setMinY(1);
+                graph.getViewport().setMaxY(5);
+                series.setDrawBackground(true);
+                series.setBackgroundColor(Color.BLUE);
+
+
+                graph.getGridLabelRenderer().setHumanRounding(false);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("team2", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+    }
+
 }
