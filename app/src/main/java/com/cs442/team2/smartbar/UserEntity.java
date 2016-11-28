@@ -64,7 +64,7 @@ public class UserEntity implements Serializable {
 
     private Image profileImg;
 
-    public UserEntity(String firstname, String lastName, String email, String password, String age, String height, String weight ) {
+    public UserEntity(String firstname, String lastName, String email, String password, String age, String height, String weight) {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
         this.setFirstName(firstname);
         this.setLastName(lastName);
@@ -75,8 +75,8 @@ public class UserEntity implements Serializable {
         this.setWeight(weight);
 
     }
-    public UserEntity()
-    {
+
+    public UserEntity() {
 
     }
 

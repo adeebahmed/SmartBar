@@ -38,17 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         UserEntity user = new UserEntity();
-        user.setEmail("sumedha@gmail.com");
-        user.setFirstName("Sumedha");
-        user.setLastName("Gupta");
-        user.setUserId("12345");
-        user.setPassword("12345");
-        user.setHeight("5.7");
-        user.setWeight("120lb");
-        user.setAge("25");
-        user.setUsername("sumedha22");
-        user.setLocation("Chicago");
-        mDatabase.child("users").child(user.getUsername()).setValue(user);
+
 
 
 ///* ADD FOR UPDATING FRIENDS LIST

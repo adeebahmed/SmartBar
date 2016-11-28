@@ -3,9 +3,9 @@ package com.cs442.team2.smartbar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 
 import com.cs442.team2.smartbar.fragments.CalendarFragment;
 import com.cs442.team2.smartbar.fragments.NotesFragment;
@@ -18,7 +18,7 @@ import java.util.Date;
  * Created by SumedhaGupta on 10/27/16.
  */
 
-public class UserJournalActivity extends FragmentActivity implements OnClickOpenModule {
+public class UserJournalActivity extends ActionBarActivity implements OnClickOpenModule {
 
     UserJournalFragment userJournalFragment;
     UserEntity user;
@@ -31,8 +31,8 @@ public class UserJournalActivity extends FragmentActivity implements OnClickOpen
         Intent intent = getIntent();
         if (intent != null) {
             user = (UserEntity) intent.getSerializableExtra("user");
-        }
 
+        }
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         userJournalFragment = new UserJournalFragment();
@@ -63,7 +63,7 @@ public class UserJournalActivity extends FragmentActivity implements OnClickOpen
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("selectedDate", date);
                 notesFragment.setArguments(bundle);
-                //fragmentTransaction.addToBackStack("calendar");
+                fragmentTransaction.addToBackStack("calendar");
                 fragmentTransaction.commit();
                 break;
         }

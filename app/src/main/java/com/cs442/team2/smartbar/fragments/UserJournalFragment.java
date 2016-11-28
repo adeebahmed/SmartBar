@@ -1,5 +1,6 @@
 package com.cs442.team2.smartbar.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TwoLineListItem;
 
 import com.cs442.team2.smartbar.R;
 import com.cs442.team2.smartbar.UserEntity;
@@ -96,7 +98,7 @@ public class UserJournalFragment extends Fragment implements SearchView.OnQueryT
         workoutListAdapter = new WorkoutListAdapter(getContext(), R.layout.workout_list_txtview, workoutHistoryDetails);
         // Creating the list adapter and populating the list
         workoutListAdapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_2, workoutHistoryDetails) {
-            /*@Override
+            @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TwoLineListItem row;
                 if (convertView == null) {
@@ -110,7 +112,7 @@ public class UserJournalFragment extends Fragment implements SearchView.OnQueryT
                 row.getText2().setText(data.getDate());
 
                 return row;
-            }*/
+            }
         };
         workoutHistory.setAdapter(workoutListAdapter);
         workoutListAdapter.notifyDataSetChanged();

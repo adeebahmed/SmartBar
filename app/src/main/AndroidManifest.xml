@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cs442.team2.smartbar">
+          package="com.cs442.team2.smartbar">
 
     <application
         android:allowBackup="true"
@@ -8,30 +8,28 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
-        <activity android:name="com.cs442.team2.smartbar.LoginActivity">
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.cs442.team2.smartbar.SignupActivity">
-
+        <activity android:name=".LoginActivity">
         </activity>
-        <activity android:name="com.cs442.team2.smartbar.ProfileActivity">
-
+        <activity android:name=".SignupActivity">
         </activity>
-        <activity android:name="com.cs442.team2.smartbar.NotesActivity">
-
+        <activity android:name=".ProfileActivity">
         </activity>
-        <activity android:name="com.cs442.team2.smartbar.UserJournalActivity">
-
+        <activity android:name=".NotesActivity">
         </activity>
-        <activity android:name="com.cs442.team2.smartbar.WorkOutSearchActivity">
-
+        <activity android:name=".UserJournalActivity">
         </activity>
-        <activity android:name="com.cs442.team2.smartbar.PickdateActivity">
-
+        <activity android:name=".WorkOutSearchActivity">
+        </activity>
+        <activity android:name=".PickdateActivity">
         </activity>
     </application>
 
