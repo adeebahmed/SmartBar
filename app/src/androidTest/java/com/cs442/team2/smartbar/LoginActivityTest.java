@@ -90,7 +90,7 @@ public class LoginActivityTest {
 
         }
 
-        Assert.assertEquals(true, getCurrentActivity(c).toLowerCase().contains("login"));
+        Assert.assertEquals(true, getCurrentActivity(c).toLowerCase().contains("signup"));
     }
 
     private String getCurrentActivity(Context context){
