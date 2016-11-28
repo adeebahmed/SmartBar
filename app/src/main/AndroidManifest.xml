@@ -33,6 +33,12 @@
         </activity>
         <activity android:name=".GraphActivity">
         </activity>
+        <activity android:name="com.cs442.team2.smartbar.FriendAddWorkout">
+
+        </activity>
+        <activity android:name="com.cs442.team2.smartbar.List_Main">
+
+        </activity>
     </application>
 
 </manifest>
