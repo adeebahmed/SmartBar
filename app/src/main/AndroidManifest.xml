@@ -39,6 +39,9 @@
         <activity android:name="com.cs442.team2.smartbar.List_Main">
 
         </activity>
+        <activity android:name="com.cs442.team2.smartbar.ConnectActivity">
+
+        </activity>
     </application>
 
 </manifest>
