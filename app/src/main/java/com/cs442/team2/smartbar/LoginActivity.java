@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
 
-    TextView un, pw;
+    TextView un, pw, signup;
     private DatabaseReference mDatabase;
     ArrayList<UserEntity> userList;
     private UserEntity user;
@@ -51,24 +51,25 @@ public class LoginActivity extends AppCompatActivity {
         mDatabase.child("users").child(user.getUsername()).setValue(user);
 
 
-/* ADD FOR UPDATING FRIENDS LIST
-//    final ArrayList<FrontDetails> resultse = new ArrayList<FrontDetails>();
-//    FrontListBaseAdapter asdf = new FrontListBaseAdapter(context, resultse);
-//    lv1.setAdapter(new FrontListBaseAdapter(Front.this, resultse));
-//    lv1.setOnItemClickListener(new OnItemClickListener() {
-//        @Override
-//        public void onItemClick(AdapterView<?> arg0, View arg1,
-//        int position, long arg3) {
-//            Object o = lv1.getItemAtPosition(position);
-//            FrontDetails obj_itemDetails = (FrontDetails)o;
-//            Toast.makeText(context, "You have chosen " + ' ' + obj_itemDetails.getMsgType(), Toast.LENGTH_LONG).show();
-//        }
-//    });
-//    */
+///* ADD FOR UPDATING FRIENDS LIST
+////    final ArrayList<FrontDetails> resultse = new ArrayList<FrontDetails>();
+////    FrontListBaseAdapter asdf = new FrontListBaseAdapter(context, resultse);
+////    lv1.setAdapter(new FrontListBaseAdapter(Front.this, resultse));
+////    lv1.setOnItemClickListener(new OnItemClickListener() {
+////        @Override
+////        public void onItemClick(AdapterView<?> arg0, View arg1,
+////        int position, long arg3) {
+////            Object o = lv1.getItemAtPosition(position);
+////            FrontDetails obj_itemDetails = (FrontDetails)o;
+////            Toast.makeText(context, "You have chosen " + ' ' + obj_itemDetails.getMsgType(), Toast.LENGTH_LONG).show();
+////        }
+////    });
+////    */
 
         Button btnLogIn = (Button) findViewById(R.id.btn_login);
         un = (TextView) findViewById(R.id.input_email);
         pw = (TextView) findViewById(R.id.input_password);
+        signup = (TextView) findViewById(R.id.link_signup);
 
 
         btnLogIn.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +82,15 @@ public class LoginActivity extends AppCompatActivity {
                 user_exists(u,p);
             }
         });
+
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent signupIntent = new Intent(getApplicationContext(), SignupActivity.class);
+                startActivity(signupIntent);
+            }
+        });
+
     }
     private boolean userExists = false;
     private void user_exists(final String u, final String p) {
