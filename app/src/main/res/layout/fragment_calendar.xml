@@ -41,7 +41,14 @@
         <TextView
             android:id="@+id/textview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Future workouts: Green color"/>
+
+        <TextView
+            android:text="Past workouts: Blue Color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView5" />
 
     </LinearLayout>
 </ScrollView>
