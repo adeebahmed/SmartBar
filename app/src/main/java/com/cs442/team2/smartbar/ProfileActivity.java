@@ -43,10 +43,12 @@ public class ProfileActivity extends AppCompatActivity {
         final Intent journalIntent = new Intent(this, UserJournalActivity.class);
         final Intent grpahIntent = new Intent(this, PickdateActivity.class);
         final Intent friendsIntent = new Intent(this, LoginActivity.class);
+        final Intent connectIntent = new Intent(this, ConnectActivity.class);
         Button btnlogout = (Button) findViewById(R.id.Button06);
         Button btnjournal = (Button) findViewById(R.id.journal);
         Button btngraph = (Button) findViewById(R.id.Button02);
         Button btnfriends = (Button) findViewById(R.id.Button03);
+        Button btnConnect = (Button) findViewById(R.id.Button05);
 
         final Bundle b = new Bundle();
         b.putSerializable("user", user);
@@ -78,6 +80,13 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(friendsIntent);
+            }
+        });
+
+        btnConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(connectIntent);
             }
         });
     }
