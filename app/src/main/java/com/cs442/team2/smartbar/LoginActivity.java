@@ -60,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         un = (TextView) findViewById(R.id.input_email);
         pw = (TextView) findViewById(R.id.input_password);
         signup = (TextView) findViewById(R.id.link_signup);
+        try{un.setText(getIntent().getExtras().get("username").toString());}catch(Exception e){}
 
 
         btnLogIn.setOnClickListener(new View.OnClickListener() {
