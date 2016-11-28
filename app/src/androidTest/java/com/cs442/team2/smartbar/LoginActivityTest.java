@@ -43,8 +43,8 @@ public class LoginActivityTest {
 
     @Test
     public void successfulLogin(){
-        onView(withId(R.id.input_email)).perform(typeText("adeeb"), closeSoftKeyboard());
-        onView(withId(R.id.input_password)).perform(typeText("smartbar"), closeSoftKeyboard());
+        onView(withId(R.id.input_email)).perform(typeText("adeebahmed"), closeSoftKeyboard());
+        onView(withId(R.id.input_password)).perform(typeText("smartbar2"), closeSoftKeyboard());
         onView(withText("Login")).perform(click());
         Assert.assertEquals(true, getCurrentActivity(c).toLowerCase().contains("profile"));
     }
@@ -94,7 +94,7 @@ public class LoginActivityTest {
     }
 
     private String getCurrentActivity(Context context){
-        try{Thread.sleep(500);}catch (Exception e){}
+        try{Thread.sleep(600);}catch (Exception e){}
 
         ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
         ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
