@@ -82,6 +82,12 @@ public class LoginActivityTest {
         Assert.assertEquals(true, getCurrentActivity(c).toLowerCase().contains("login"));
     }
 
+    @Test
+    public void signupLinkTest() throws InterruptedException{
+        try{onView(withId(R.id.link_signup)).perform(click());}catch(Exception e){}
+        Assert.assertEquals(true, getCurrentActivity(c).toLowerCase().contains("signup"));
+    }
+
     private String getCurrentActivity(Context context){
         try{Thread.sleep(500);}catch (Exception e){}
 
