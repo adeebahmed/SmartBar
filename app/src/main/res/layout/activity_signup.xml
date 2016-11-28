@@ -63,7 +63,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="numberPassword"
+        android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/txtPass"
         android:layout_below="@+id/txtEmail"
@@ -76,7 +76,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="numberPassword"
+        android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/txtConfirmPass"
         android:layout_below="@+id/txtPass"
@@ -102,6 +102,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="number"
         android:id="@+id/txtHeight"
         android:layout_below="@+id/txtDOB"
         android:hint="Height (in)"
@@ -113,8 +114,9 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
+        android:id="@+id/txtWeight"
         android:hint="Weight(lbs)"
+        android:inputType="number"
         android:layout_below="@+id/txtHeight"
         android:layout_alignLeft="@+id/textView2"
         android:layout_alignStart="@+id/textView2"
