@@ -17,8 +17,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity">
-        </activity>
         <activity android:name=".SignupActivity">
         </activity>
         <activity android:name=".ProfileActivity">
@@ -33,11 +31,11 @@
         </activity>
         <activity android:name=".GraphActivity">
         </activity>
-        <activity android:name="com.cs442.team2.smartbar.FriendAddWorkout">
-
+        <activity android:name=".List_Main">
         </activity>
-        <activity android:name="com.cs442.team2.smartbar.List_Main">
-
+        <activity android:name=".FriendAddWorkout">
+        </activity>
+        <activity android:name=".LoginActivity">
         </activity>
     </application>
 

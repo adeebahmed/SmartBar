@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Invalid username or password.", Toast.LENGTH_SHORT).show();
 
         if(u.contains(".") || u.contains("#") || u.contains("$") || u.contains("[") || u.contains("]") ||
-        p.contains(".") || p.contains("#") || p.contains("$") || p.contains("[") || p.contains("]"))
+                p.contains(".") || p.contains("#") || p.contains("$") || p.contains("[") || p.contains("]"))
             Toast.makeText(getApplicationContext(), "Invalid username or password.", Toast.LENGTH_SHORT).show();
 
         ValueEventListener postListener = new ValueEventListener() {

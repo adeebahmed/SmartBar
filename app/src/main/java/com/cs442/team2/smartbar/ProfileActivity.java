@@ -42,7 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
         final Intent logoutIntent = new Intent(this, LoginActivity.class);
         final Intent journalIntent = new Intent(this, UserJournalActivity.class);
         final Intent grpahIntent = new Intent(this, PickdateActivity.class);
-        final Intent friendsIntent = new Intent(this, LoginActivity.class);
+        final Intent friendsIntent = new Intent(this, List_Main.class);
         final Intent connectIntent = new Intent(this, ConnectActivity.class);
         Button btnlogout = (Button) findViewById(R.id.Button06);
         Button btnjournal = (Button) findViewById(R.id.journal);
