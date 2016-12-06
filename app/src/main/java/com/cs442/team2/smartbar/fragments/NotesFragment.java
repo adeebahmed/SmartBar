@@ -1,8 +1,10 @@
 package com.cs442.team2.smartbar.fragments;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TwoLineListItem;
@@ -47,19 +50,20 @@ public class NotesFragment extends Fragment implements AdapterView.OnItemClickLi
     ArrayAdapter workoutListAdapter;
     String dateOfWorkout;
     private Date selectedDate;
-
+     View v;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.saveInstance = savedInstanceState;
         // Inflate the layout for this fragment
-        final View v = inflater.inflate(R.layout.fragment_workouts_notes, container, false);
+        v = inflater.inflate(R.layout.fragment_workouts_notes, container, false);
 
 
         Bundle bundle = getArguments();
         if (bundle != null) {
             selectedDate = (Date) bundle.getSerializable("selectedDate");
         }
+
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("smartbar", MODE_PRIVATE);
         String userString = sharedPreferences.getString("user", "");
@@ -71,7 +75,12 @@ public class NotesFragment extends Fragment implements AdapterView.OnItemClickLi
         workoutHistoryDetails = new ArrayList<>();
         loadWorkouts(user);
         TextView selectedDateTxtView = (TextView) v.findViewById(R.id.selectedDate);
-        selectedDateTxtView.setText("Date : " + removeTime(selectedDate));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd:M:yyyy");
+        String date = sdf.format(selectedDate);
+        System.out.println(date); //15/10/2013
+
+        selectedDateTxtView.setText("Date : " + date);
         workoutHistory = (ListView) v.findViewById(R.id.workoutsList);
         // Creating the list adapter and populating the list
         workoutListAdapter = new ArrayAdapter(v.getContext(), android.R.layout.simple_list_item_2, workoutHistoryDetails) {
@@ -86,7 +95,7 @@ public class NotesFragment extends Fragment implements AdapterView.OnItemClickLi
                 }
                 WorkoutEntity data = workoutHistoryDetails.get(position);
                 row.getText1().setText(data.getExercise());
-                row.getText2().setText(data.getDate());
+                //row.getText2().setText(data.getDate());
                 dateOfWorkout = data.getDate();
 
                 return row;
@@ -156,18 +165,21 @@ public class NotesFragment extends Fragment implements AdapterView.OnItemClickLi
 
         WorkoutEntity workout = (WorkoutEntity) workoutHistory.getItemAtPosition(position);
 
+        if (!workout.getExercise().equals("No Workouts!!!")) {
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        AddNoteFragment addNoteFragment = new AddNoteFragment();
-        fragmentTransaction.replace(R.id.noteFragment, addNoteFragment, "addviewnote");
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("workout", workout);
-        addNoteFragment.setArguments(bundle);
-        //fragmentTransaction.addToBackStack("notes");
-        fragmentTransaction.commit();
-
+            AddNoteFragment addNoteFragment = new AddNoteFragment();
+            fragmentTransaction.replace(R.id.noteFragment, addNoteFragment, "addviewnote");
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("workoutDate", selectedDate);
+            bundle.putSerializable("workout", workout);
+            addNoteFragment.setArguments(bundle);
+            //fragmentTransaction.addToBackStack("notes");
+            fragmentTransaction.commit();
+        }else{
+            Snackbar.make(v,"No Workouts",Snackbar.LENGTH_SHORT).show();
+        }
 
     }
 }

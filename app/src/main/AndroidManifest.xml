@@ -38,8 +38,7 @@
         <activity android:name=".LoginActivity">
         </activity>
         <activity android:name="com.cs442.team2.smartbar.ConnectActivity">
-
-        </activity>
+</activity>
     </application>
 
 </manifest>

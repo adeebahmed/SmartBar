@@ -9,7 +9,8 @@
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Notes"/>
+        android:text="Notes"
+        android:paddingLeft="15dp"/>
 
     <EditText
         android:layout_width="fill_parent"
@@ -17,16 +18,32 @@
         android:gravity="top|left"
         android:inputType="textMultiLine"
         android:lines="8"
-        android:maxLines="10"
+        android:maxLines="5"
         android:minLines="6"
+        android:paddingLeft="15dp"
         android:scrollbars="vertical"
         android:id="@+id/noteEdtText"/>
 
-    <Button
-        android:text="Save"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/saveBtn"/>
+        android:layout_height="match_parent">
+
+        <Button
+            android:text="Save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/saveBtn"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="Set Reminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/setReminder"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
     <!--
         <TextView

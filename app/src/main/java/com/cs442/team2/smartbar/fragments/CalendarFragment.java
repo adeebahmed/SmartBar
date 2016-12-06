@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -68,7 +69,6 @@ public class CalendarFragment extends Fragment {
                     mon = monthOfYear;
                     dy = dayOfMonth;
                     updateDisplay();
-                    Toast.makeText(getContext(), "Date choosen is " + date.getText(), Toast.LENGTH_SHORT).show();
                     String selectedDate = new String();
                     selectedDate = yr + "-" + (mon + 1) + "-" + dy;
                     Date setDate = new Date();
@@ -114,7 +114,6 @@ public class CalendarFragment extends Fragment {
 
         date = (TextView) v.findViewById(R.id.dateTxtView);
 
-
         Button datePickerButton = (Button) v.findViewById(R.id.date_picker_button);
 
         /** This integer uniquely defines the dialog to be used for displaying date picker.*/
@@ -128,6 +127,7 @@ public class CalendarFragment extends Fragment {
 
             }
         });
+
 
 
         return v;
@@ -201,15 +201,15 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onChangeMonth(int month, int year) {
                 String text = "month: " + month + " year: " + year;
-                Toast.makeText(getContext(), text,
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), text,
+//                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onLongClickDate(Date date, View view) {
-                Toast.makeText(getContext(),
-                        "Long click " + formatter.format(date),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(),
+//                        "Long click " + formatter.format(date),
+//                        Toast.LENGTH_SHORT).show();
             }
 
             @Override

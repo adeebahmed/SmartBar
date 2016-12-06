@@ -2,8 +2,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:orientation="vertical"
-              android:background="@drawable/workoutbg">
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +19,9 @@
                 android:id="@+id/selectedDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Date"/>
+                android:text="Date"
+                android:textSize="20sp"
+                android:paddingLeft="15dp" />
 
         </LinearLayout>
 
@@ -32,7 +33,10 @@
             <ListView
                 android:id="@+id/workoutsList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:textSize="2dp"
+
+                 />
         </LinearLayout>
 
     </LinearLayout>

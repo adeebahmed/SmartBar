@@ -3,6 +3,7 @@ package com.cs442.team2.smartbar.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TwoLineListItem;
 
+import com.cs442.team2.smartbar.ExpandableListAdapter;
 import com.cs442.team2.smartbar.R;
 import com.cs442.team2.smartbar.UserEntity;
 import com.cs442.team2.smartbar.WorkoutEntity;
@@ -26,6 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Created by SumedhaGupta on 11/6/16.
@@ -34,12 +39,17 @@ import java.util.ArrayList;
 public class UserJournalFragment extends Fragment implements SearchView.OnQueryTextListener {
 
 
-    ListView workoutHistory;
+    ExpandableListView workoutHistory;
     ArrayAdapter workoutListAdapter;
     ArrayList<WorkoutEntity> workoutHistoryDetails;
     OnClickOpenModule onClickOpenModule;
     private DatabaseReference mDatabase;
     SearchView searchView;
+     ExpandableListAdapter expListAdapter;
+
+    ArrayList<String> groupList;
+    LinkedHashMap exerciseCollection;
+
 
     public void setOpenModuleInterface(OnClickOpenModule onClickOpenModule) {
         this.onClickOpenModule = onClickOpenModule;
@@ -49,7 +59,7 @@ public class UserJournalFragment extends Fragment implements SearchView.OnQueryT
     public boolean onQueryTextChange(String newText) {
 
         if (TextUtils.isEmpty(newText)) {
-            workoutHistory.clearTextFilter();
+           workoutHistory.clearTextFilter();
         } else {
             workoutHistory.setFilterText(newText.toString());
         }
@@ -68,15 +78,17 @@ public class UserJournalFragment extends Fragment implements SearchView.OnQueryT
         final View view = inflater.inflate(R.layout.fragment_user_journal, container, false);
         Bundle bundle = getArguments();
         UserEntity user = (UserEntity) bundle.getSerializable("user");
-
+        groupList = new ArrayList<String>();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         //mDatabase.child("users").child(user.getUsername()).setValue(user);
 
         workoutHistoryDetails = new ArrayList<>();
+        exerciseCollection = new LinkedHashMap<String, List<String>>();
+
         loadWorkouts(user);
 
-        Button cal = (Button) view.findViewById(R.id.calButton);
+        FloatingActionButton cal = (FloatingActionButton) view.findViewById(R.id.calButton);
 
         cal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +98,7 @@ public class UserJournalFragment extends Fragment implements SearchView.OnQueryT
         });
 
 
-        workoutHistory = (ListView) view.findViewById(R.id.history);
+        workoutHistory = (ExpandableListView) view.findViewById(R.id.history);
         searchView = (SearchView) view.findViewById(R.id.searchView);
         searchView.setQueryHint("Enter exercise Name");
         searchView.setIconifiedByDefault(false);
@@ -95,9 +107,21 @@ public class UserJournalFragment extends Fragment implements SearchView.OnQueryT
 
         workoutHistory.setTextFilterEnabled(true);
 
-        workoutListAdapter = new WorkoutListAdapter(getContext(), R.layout.workout_list_txtview, workoutHistoryDetails);
+
+
+       /* LinkedHashMap laptopCollection = new LinkedHashMap<String, List<String>>();
+        ArrayList<String> a = new ArrayList<>();
+        a.add("somethig");
+        a.add("asdasdad");
+        laptopCollection.put("group1",a);*/
+        expListAdapter = new ExpandableListAdapter(
+                getActivity(), groupList, exerciseCollection);
+        workoutHistory.setAdapter(expListAdapter);
+
+
+       // workoutListAdapter = new WorkoutListAdapter(getContext(), R.layout.workout_list_txtview, workoutHistoryDetails);
         // Creating the list adapter and populating the list
-        workoutListAdapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_2, workoutHistoryDetails) {
+        /*workoutListAdapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_2, workoutHistoryDetails) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TwoLineListItem row;
@@ -113,9 +137,9 @@ public class UserJournalFragment extends Fragment implements SearchView.OnQueryT
 
                 return row;
             }
-        };
-        workoutHistory.setAdapter(workoutListAdapter);
-        workoutListAdapter.notifyDataSetChanged();
+        };*/
+        //workoutHistory.setAdapter(workoutListAdapter);
+        //workoutListAdapter.notifyDataSetChanged();
 
         return view;
     }
@@ -129,8 +153,14 @@ public class UserJournalFragment extends Fragment implements SearchView.OnQueryT
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     WorkoutEntity workout = (WorkoutEntity) snapshot.getValue(WorkoutEntity.class);
                     workoutHistoryDetails.add(workout);
+                    groupList.add(workout.getExercise().toString());
+                    ArrayList<String> aa = new ArrayList<String>();
+                    aa.add("Date : "+workout.getDate());
+                    aa.add("Bar Weight : "+workout.getBarWeight()+ "lb");
+                    exerciseCollection.put(workout.getExercise().toString(),aa);
+
                 }
-                workoutListAdapter.notifyDataSetChanged();
+                  expListAdapter.notifyDataSetChanged();
             }
 
             @Override

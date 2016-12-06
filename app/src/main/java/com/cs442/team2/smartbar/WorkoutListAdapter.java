@@ -71,7 +71,7 @@ public class WorkoutListAdapter extends ArrayAdapter<WorkoutEntity> implements F
                     if (orig != null && orig.size() > 0) {
                         for (final WorkoutEntity g : orig) {
                             if (g.getExercise().toLowerCase()
-                                    .contains(constraint.toString()))
+                                    .contains(constraint.toString().toLowerCase()))
                                 results.add(g);
                         }
                     }
