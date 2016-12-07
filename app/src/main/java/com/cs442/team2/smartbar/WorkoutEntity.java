@@ -12,7 +12,7 @@ public class WorkoutEntity implements Serializable{
     String date;
     String startTime;
     String endTime;
-    int wUserId;
+    //int wUserId;
     String exercise;
     String reps;
     String sets;
@@ -59,13 +59,13 @@ public class WorkoutEntity implements Serializable{
         this.endTime = endTime;
     }
 
-    public int getwUserId() {
+ /*   public int getwUserId() {
         return wUserId;
     }
 
     public void setwUserId(int wUserId) {
         this.wUserId = wUserId;
-    }
+    }*/
 
     public String getExercise() {
         return exercise;

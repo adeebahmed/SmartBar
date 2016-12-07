@@ -52,6 +52,8 @@ public class ConnectActivity extends AppCompatActivity {
                         }
                 }
                 else{
+
+                  // mBluetoothAdapter.startDiscovery();
                     // Create a BroadcastReceiver for ACTION_FOUND
                      final BroadcastReceiver mReceiver = new BroadcastReceiver() {
                         public void onReceive(Context context, Intent intent) {

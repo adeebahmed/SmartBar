@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -24,12 +25,11 @@ public class FriendAddWorkout extends AppCompatActivity
     UserEntity friend;
     private DatabaseReference mDatabase;
     UserEntity user;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendworkoutpage);
-        String friendName = getIntent().getStringExtra("friendName");
+        final String friendName = getIntent().getStringExtra("friendName");
 
         SharedPreferences sharedPreferences =this.getSharedPreferences("smartbar", MODE_PRIVATE);
         String userString = sharedPreferences.getString("user", "");
@@ -40,7 +40,7 @@ public class FriendAddWorkout extends AppCompatActivity
 
         final TextView tname = (TextView)findViewById(R.id.text1);
         final TextView tage = (TextView)findViewById(R.id.text2);
-        final TextView tlocation = (TextView)findViewById(R.id.text3);
+       // final TextView tlocation = (TextView)findViewById(R.id.text3);
         final TextView tbmi = (TextView)findViewById(R.id.text4);
 
 
@@ -49,7 +49,6 @@ public class FriendAddWorkout extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 friend = (UserEntity) dataSnapshot.getValue(UserEntity.class);
-
                 final int weight = Integer.parseInt(friend.getWeight());
                 Double height = Double.parseDouble(friend.getHeight());
 
@@ -62,7 +61,7 @@ public class FriendAddWorkout extends AppCompatActivity
 
                 tname.setText(friend.getFirstName() + friend.getLastName());
                 tage.setText(friend.getAge());
-                tlocation.setText(friend.getLocation());
+               // tlocation.setText(friend.getLocation());
                 tbmi.setText(String.format("%.2f",bmi));
 
 
@@ -105,11 +104,16 @@ public class FriendAddWorkout extends AppCompatActivity
 
 
                 WorkoutEntity w= new WorkoutEntity();
-                w.setwId("workout3");
+               /* w.setwId("workout6");
                 mDatabase = FirebaseDatabase.getInstance().getReference();
-                mDatabase.child("users").child(friend.getUsername()).child("workouts").setValue(w);
-                mDatabase.child("users").child(user.getUsername()).child("workouts").setValue(w);
+              //  for (WorkoutEntity ww : workoutHistoryDetails) {
+                  mDatabase.child("users").child(user.getUsername()).child("workouts").child("workout6").setValue(w);
+                mDatabase.child("users").child(friendName).child("workouts").child("workout6").setValue(w);*/
+                //Toast.makeText(List_Main.this, "You Clicked at " +text[+ position], Toast.LENGTH_SHORT).show();
 
+                Snackbar.make(v,"Added to workouts",Snackbar.LENGTH_SHORT).show();
+                /*Intent intent=  new Intent(FriendAddWorkout.this, UserJournalActivity.class);
+                startActivity(intent);*/
                 // Creates an explicit intent for an Activity in your app
                /* //  Intent resultIntent = new Intent(this, CalendarActivity.class);
 

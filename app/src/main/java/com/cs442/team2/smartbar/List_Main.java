@@ -61,7 +61,7 @@ public class List_Main extends ActionBarActivity
                 text= new String[friends.size()];
                 for(int i=0; i<friends.size(); i++)
                 {
-                    imageId[i] = R.drawable.bar;
+                    imageId[i] = R.drawable.dt2;
                 }
                 for(String s: friends)
                 {

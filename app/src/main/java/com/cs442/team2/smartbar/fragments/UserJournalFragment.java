@@ -1,6 +1,6 @@
 package com.cs442.team2.smartbar.fragments;
 
-import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -11,26 +11,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.TwoLineListItem;
 
 import com.cs442.team2.smartbar.ExpandableListAdapter;
 import com.cs442.team2.smartbar.R;
 import com.cs442.team2.smartbar.UserEntity;
 import com.cs442.team2.smartbar.WorkoutEntity;
-import com.cs442.team2.smartbar.WorkoutListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by SumedhaGupta on 11/6/16.
@@ -77,7 +76,12 @@ public class UserJournalFragment extends Fragment implements SearchView.OnQueryT
 
         final View view = inflater.inflate(R.layout.fragment_user_journal, container, false);
         Bundle bundle = getArguments();
-        UserEntity user = (UserEntity) bundle.getSerializable("user");
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("smartbar", MODE_PRIVATE);
+        String userString = sharedPreferences.getString("user", "");
+        Gson gson = new Gson();
+        UserEntity user = gson.fromJson(userString, UserEntity.class);
+       // UserEntity user = (UserEntity) bundle.getSerializable("user");
         groupList = new ArrayList<String>();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 

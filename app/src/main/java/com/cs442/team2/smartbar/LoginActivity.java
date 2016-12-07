@@ -3,6 +3,8 @@ package com.cs442.team2.smartbar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -34,6 +36,14 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         userList = new ArrayList<>();
         context = this;
+
+        if (!isNetworkAvailable()) {
+
+            Toast.makeText(this, " No Internet Connection! ", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setClassName("com.android.settings", "com.android.settings.Settings$DataUsageSummaryActivity");
+            startActivity(intent);
+        }
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -128,6 +138,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
         mDatabase.child("users").child(u).addListenerForSingleValueEvent(postListener);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 

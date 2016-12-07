@@ -58,7 +58,7 @@ public class PickdateActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
         Bundle bundle = getIntent().getExtras();
-        final int userid = bundle.getInt("userid");
+        //final int userid = bundle.getInt("userid");
         date= (TextView) findViewById(R.id.numberview);
 
 
@@ -88,13 +88,13 @@ public class PickdateActivity extends Activity {
                 b.putInt("month",month);
                 b.putInt("day",dayOfMonth);
                 b.putInt("year",year);
-                b.putInt("userid",userid);
+                //b.putInt("userid",userid);
                 intent.putExtras(b);
                 startActivity(intent);
                 finish();
                 // Toast.makeText(getApplicationContext(), "" + dayOfMonth, 0).show();// TODO Auto-generated method stub
-                Toast.makeText(getApplicationContext(), "Selected date is " + (month + 1) + "-" + dayOfMonth + "-" +
-                        year, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Selected date is " + (month + 1) + "-" + dayOfMonth + "-" +
+                //      year, Toast.LENGTH_SHORT).show();
 
             }
         });
